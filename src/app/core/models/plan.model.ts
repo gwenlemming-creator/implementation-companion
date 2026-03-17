@@ -98,7 +98,7 @@ function isModuleEnabled(slug: string, modules: Plan['modules']): boolean {
 
 export function computePlanStatus(plan: Plan): PlanStatus {
   const enabled = plan.sections.filter(s => s.enabled);
-  if (enabled.every(s => s.status === 'complete')) return 'complete';
+  if (enabled.length > 0 && enabled.every(s => s.status === 'complete')) return 'complete';
   if (enabled.some(s => s.status !== 'not_started')) return 'in_progress';
   return 'not_started';
 }

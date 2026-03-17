@@ -18,6 +18,14 @@ describe('buildDefaultSections', () => {
     const sections = buildDefaultSections({ timeOff: false, benefits: false, orgLevels: false });
     expect(sections.every(s => s.status === 'not_started')).toBe(true);
   });
+
+  it('includes only the time-off section when only timeOff module is enabled', () => {
+    const sections = buildDefaultSections({ timeOff: true, benefits: false, orgLevels: false });
+    expect(sections.length).toBe(8);
+    expect(sections.some(s => s.slug === 'time-off')).toBe(true);
+    expect(sections.some(s => s.slug === 'benefits')).toBe(false);
+    expect(sections.some(s => s.slug === 'org-levels')).toBe(false);
+  });
 });
 
 describe('computePlanStatus', () => {
