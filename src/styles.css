@@ -91,3 +91,40 @@ body {
 .btn-secondary { background: #fff; color: var(--text-color); border: 1px solid var(--border-color); }
 .btn-danger   { background: #dc2626; color: #fff; }
 .btn:disabled { opacity: 0.45; cursor: default; }
+
+/* Plan Card */
+.plan-card {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--base-padding);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow var(--transition);
+  cursor: pointer;
+}
+.plan-card:hover { box-shadow: var(--box-shadow-small); }
+.plan-card__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.plan-card__name { font-family: var(--font-family-header); font-weight: 700; font-size: 15px; }
+.plan-card__progress { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.progress-bar-bg { flex: 1; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width var(--transition); }
+.progress-label { font-size: 12px; font-weight: 600; color: var(--primary); min-width: 36px; text-align: right; }
+.plan-card__next-action { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 6px; }
+.plan-card__meta { font-size: 11px; color: var(--gray400); }
+
+/* App Shell Layout */
+.app-shell { display: flex; min-height: 100vh; }
+.left-nav { width: 220px; background: #fff; border-right: 1px solid var(--border-color); padding: 20px 0; flex-shrink: 0; }
+.left-nav__item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 13px; cursor: pointer; color: #334155; border-left: 3px solid transparent; transition: background var(--transition); }
+.left-nav__item:hover { background: #f8faff; }
+.left-nav__item--active { background: var(--primary-light); border-left-color: var(--primary); color: var(--primary); font-weight: 600; }
+.main-content { flex: 1; padding: var(--base-margin); overflow-y: auto; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--base-margin); }
+.page-title { font-family: var(--font-family-header); font-size: 22px; font-weight: 700; }
+.page-subtitle { font-size: 13px; color: var(--gray400); margin-top: 4px; }
+.toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: var(--base-margin); }
+.search-input { flex: 1; max-width: 320px; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 13px; }
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.empty-state { color: var(--gray400); font-size: 14px; }

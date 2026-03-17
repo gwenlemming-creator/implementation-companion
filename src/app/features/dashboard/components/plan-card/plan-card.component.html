@@ -1,0 +1,14 @@
+<a class="plan-card" [routerLink]="['/plans', plan().id]">
+  <div class="plan-card__header">
+    <span class="plan-card__name">{{ plan().clientName }}</span>
+    <app-status-badge [status]="plan().status" />
+  </div>
+  <div class="plan-card__progress">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" [ngStyle]="{ width: progressPct() + '%' }"></div>
+    </div>
+    <span class="progress-label">{{ progressPct() }}%</span>
+  </div>
+  <p class="plan-card__next-action">{{ nextAction() }}</p>
+  <p class="plan-card__meta">Modules: {{ enabledModules() }}</p>
+</a>
