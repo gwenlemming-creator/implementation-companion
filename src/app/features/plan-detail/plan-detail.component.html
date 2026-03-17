@@ -1,0 +1,43 @@
+@if (plan(); as p) {
+  <div class="app-shell">
+    <aside class="left-nav-wrapper">
+      <div class="left-nav__back">
+        <a routerLink="/plans"><i class="fa-light fa-arrow-left"></i> Plans</a>
+      </div>
+      <app-section-nav
+        [sections]="p.sections"
+        [planId]="planId"
+        [spConfigComplete]="spConfigComplete()"
+        [spConfigFilledCount]="spConfigFilledCount()" />
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div class="page-header__left">
+          <nav class="breadcrumb">
+            <a routerLink="/plans">Implementation Plans</a>
+            <span> › </span>
+            <span>{{ p.clientName }}</span>
+          </nav>
+          <div class="page-header__title-row">
+            <h1 class="page-title">{{ p.clientName }}</h1>
+            <app-status-badge [status]="p.status" />
+          </div>
+        </div>
+        <button class="btn btn-secondary" (click)="showEditDrawer.set(true)">
+          Edit Plan Settings
+        </button>
+      </div>
+
+      <router-outlet />
+    </main>
+  </div>
+
+  @if (showEditDrawer()) {
+    <app-edit-plan-drawer
+      [plan]="p"
+      (closed)="showEditDrawer.set(false)" />
+  }
+} @else {
+  <p class="empty-state" style="padding: 2rem;">Plan not found.</p>
+}

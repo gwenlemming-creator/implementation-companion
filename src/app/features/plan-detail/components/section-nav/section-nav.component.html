@@ -1,0 +1,24 @@
+<div class="section-nav">
+  <div class="section-nav__group-label">SP Configuration</div>
+  <div class="section-nav__item section-nav__item--config"
+       routerLinkActive="section-nav__item--active"
+       [routerLink]="['/plans', planId(), 'config']"
+       (click)="configSelected.emit()">
+    <i class="fa-light fa-gear"></i>
+    <span class="section-nav__label">Configuration</span>
+    <span class="section-nav__badge" [class.section-nav__badge--complete]="spConfigComplete()">
+      {{ spConfigFilledCount() }}/11
+    </span>
+  </div>
+
+  <div class="section-nav__group-label" style="margin-top: 16px;">Plan Sections</div>
+  @for (section of sections(); track section.slug) {
+    <div class="section-nav__item"
+         routerLinkActive="section-nav__item--active"
+         [routerLink]="['/plans', planId(), 'sections', section.slug]">
+      <span class="section-nav__num">{{ section.order }}</span>
+      <span class="section-nav__label">{{ section.title }}</span>
+      <app-status-dot [status]="section.status" />
+    </div>
+  }
+</div>
