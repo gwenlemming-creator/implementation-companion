@@ -1,0 +1,43 @@
+<div class="drawer-backdrop" (click)="closed.emit()"></div>
+<div class="drawer">
+  <div class="drawer__header">
+    <h2 class="drawer__title">Edit Plan Settings</h2>
+    <button class="drawer__close" (click)="closed.emit()"><i class="fa-light fa-xmark"></i></button>
+  </div>
+
+  <div class="drawer__body">
+    <div class="form-field">
+      <label>Client Name</label>
+      <p class="readonly-value">{{ plan().clientName }}</p>
+    </div>
+
+    <fieldset class="form-fieldset">
+      <legend class="form-fieldset__legend">Optional Modules</legend>
+
+      @for (key of ['timeOff','benefits','orgLevels']; track key) {
+        <label class="toggle-row">
+          <div class="toggle-row__text">
+            <span class="toggle-row__label">{{ moduleLabel(key) }}</span>
+          </div>
+          <input type="checkbox"
+                 [ngModel]="localModules()[key]"
+                 (ngModelChange)="onModuleToggle(key, $event)">
+        </label>
+      }
+    </fieldset>
+  </div>
+
+  <div class="drawer__footer">
+    <button class="btn btn-secondary" (click)="closed.emit()">Cancel</button>
+    <button class="btn btn-primary" (click)="save()">Save</button>
+  </div>
+</div>
+
+@if (confirmingModuleOff) {
+  <app-confirm-dialog
+    [message]="'Turning off ' + moduleLabel(confirmingModuleOff) + ' will permanently delete all data entered in that section. This cannot be undone. Are you sure?'"
+    confirmLabel="Turn Off"
+    cancelLabel="Keep On"
+    (confirmed)="confirmToggleOff()"
+    (cancelled)="cancelToggleOff()" />
+}
