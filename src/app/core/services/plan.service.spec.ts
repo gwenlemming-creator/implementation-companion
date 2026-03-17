@@ -1,12 +1,10 @@
-import { TestBed } from '@angular/core/testing';
 import { PlanService } from './plan.service';
 
 describe('PlanService', () => {
   let service: PlanService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(PlanService);
+    service = new PlanService();
   });
 
   it('createPlan returns a plan with correct clientName', () => {
@@ -47,5 +45,25 @@ describe('PlanService', () => {
     const slug = plan.sections[0].slug;
     service.updateSection(plan.id, slug, { status: 'in_progress' });
     expect(service.getPlan(plan.id)?.sections[0].status).toBe('in_progress');
+  });
+
+  it('getPlans returns a copy, not the internal array', () => {
+    service.createPlan('A', { timeOff: false, benefits: false, orgLevels: false });
+    const plans1 = service.getPlans();
+    plans1.push({} as any);
+    expect(service.getPlans().length).toBe(1);
+  });
+
+  it('toggleModule re-enable restores prior section data rather than creating a new default', () => {
+    const plan = service.createPlan('Acme', { timeOff: false, benefits: true, orgLevels: false });
+    const benefitsSlug = 'benefits';
+    service.updateSection(plan.id, benefitsSlug, { status: 'in_progress' });
+    // Disable benefits
+    service.toggleModule(plan.id, 'benefits', false);
+    expect(service.getPlan(plan.id)?.sections.find(s => s.slug === benefitsSlug)).toBeUndefined();
+    // Re-enable benefits — prior status should be restored
+    service.toggleModule(plan.id, 'benefits', true);
+    const restored = service.getPlan(plan.id)?.sections.find(s => s.slug === benefitsSlug);
+    expect(restored?.status).toBe('in_progress');
   });
 });

@@ -4,6 +4,7 @@ import { Plan, PlanSection, buildDefaultSections, computePlanStatus } from '../m
 @Injectable({ providedIn: 'root' })
 export class PlanService {
   private plans: Plan[] = [];
+  private removedSections: Map<string, PlanSection[]> = new Map();
 
   createPlan(clientName: string, modules: Plan['modules'], worksiteManagerId: string | null = null): Plan {
     const plan: Plan = {
@@ -27,7 +28,7 @@ export class PlanService {
   }
 
   getPlans(): Plan[] {
-    return this.plans;
+    return [...this.plans];
   }
 
   getPlan(id: string): Plan | undefined {
@@ -62,17 +63,29 @@ export class PlanService {
     const plan = this.getPlan(planId);
     if (!plan) return;
     plan.modules[module] = enabled;
+    const slugMap: Record<keyof Plan['modules'], string> = {
+      timeOff: 'time-off', benefits: 'benefits', orgLevels: 'org-levels'
+    };
+    const slug = slugMap[module];
     if (!enabled) {
-      const slugMap: Record<keyof Plan['modules'], string> = {
-        timeOff: 'time-off', benefits: 'benefits', orgLevels: 'org-levels'
-      };
-      const slug = slugMap[module];
+      const stash = this.removedSections.get(planId) ?? [];
+      const removed = plan.sections.filter(s => s.slug === slug);
+      this.removedSections.set(planId, [...stash, ...removed]);
       plan.sections = plan.sections.filter(s => s.slug !== slug);
     } else {
-      const rebuilt = buildDefaultSections(plan.modules);
-      const existing = new Set(plan.sections.map(s => s.slug));
-      const toAdd = rebuilt.filter(s => !existing.has(s.slug));
-      plan.sections = [...plan.sections, ...toAdd].sort((a, b) => a.order - b.order);
+      const stash = this.removedSections.get(planId) ?? [];
+      const prior = stash.filter(s => s.slug === slug);
+      this.removedSections.set(planId, stash.filter(s => s.slug !== slug));
+      if (prior.length > 0) {
+        const existing = new Set(plan.sections.map(s => s.slug));
+        const toAdd = prior.filter(s => !existing.has(s.slug));
+        plan.sections = [...plan.sections, ...toAdd].sort((a, b) => a.order - b.order);
+      } else {
+        const rebuilt = buildDefaultSections(plan.modules);
+        const existing = new Set(plan.sections.map(s => s.slug));
+        const toAdd = rebuilt.filter(s => !existing.has(s.slug));
+        plan.sections = [...plan.sections, ...toAdd].sort((a, b) => a.order - b.order);
+      }
     }
     plan.status = computePlanStatus(plan);
     plan.updatedAt = new Date().toISOString();
