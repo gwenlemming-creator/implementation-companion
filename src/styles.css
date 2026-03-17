@@ -1,1 +1,51 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  /* Brand */
+  --primary: #0f5cf5;
+  --primary-light: #eff4ff;
+
+  /* Status */
+  --success: #22c55e;
+  --success-bg: #f0fdf4;
+  --error-text: #dc2626;
+  --border-error: #fca5a5;
+  --disabled: #cbd5e1;
+  --disabled-bg: #f1f5f9;
+
+  /* Text */
+  --text-color: #1e293b;
+  --gray400: #94a3b8;
+
+  /* Borders */
+  --border-color: #e2e8f0;
+
+  /* Spacing */
+  --base-padding: 1rem;
+  --base-margin: 1.5rem;
+
+  /* Elevation */
+  --box-shadow-small: 0 2px 8px rgba(0,0,0,0.08);
+  --box-shadow-large: 0 8px 32px rgba(0,0,0,0.14);
+
+  /* Animation */
+  --transition: 0.3s ease-in-out;
+
+  /* Typography */
+  --font-family-body: 'Open Sans', sans-serif;
+  --font-family-header: 'Lato', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-family-body);
+  font-size: 1rem;
+  color: var(--text-color);
+  background: #f4f6fb;
+}
+
+/* Shared button styles (used across the app) */
+.btn { padding: 8px 18px; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity var(--transition); }
+.btn-primary  { background: var(--primary); color: #fff; }
+.btn-secondary { background: #fff; color: var(--text-color); border: 1px solid var(--border-color); }
+.btn-danger   { background: #dc2626; color: #fff; }
+.btn:disabled { opacity: 0.45; cursor: default; }
