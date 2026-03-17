@@ -49,3 +49,45 @@ body {
 .btn-secondary { background: #fff; color: var(--text-color); border: 1px solid var(--border-color); }
 .btn-danger   { background: #dc2626; color: #fff; }
 .btn:disabled { opacity: 0.45; cursor: default; }
+
+/* Status Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge--not-started { background: var(--disabled-bg); color: #64748b; }
+.badge--in-progress { background: var(--primary-light); color: var(--primary); }
+.badge--complete    { background: var(--success-bg); color: #16a34a; }
+
+/* Status Dot */
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.dot--not-started { background: var(--disabled); }
+.dot--in-progress { background: var(--primary); }
+.dot--complete    { background: var(--success); }
+
+/* Dialog */
+.dialog-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 500;
+}
+.dialog {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--box-shadow-large);
+}
+.dialog-message { font-size: 14px; color: var(--text-color); margin-bottom: 20px; line-height: 1.5; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.btn { padding: 8px 18px; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity var(--transition); }
+.btn-primary  { background: var(--primary); color: #fff; }
+.btn-secondary { background: #fff; color: var(--text-color); border: 1px solid var(--border-color); }
+.btn-danger   { background: #dc2626; color: #fff; }
+.btn:disabled { opacity: 0.45; cursor: default; }
