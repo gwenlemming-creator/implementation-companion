@@ -1,0 +1,53 @@
+<div class="drawer-backdrop" (click)="closed.emit()"></div>
+<div class="drawer">
+  <div class="drawer__header">
+    <h2 class="drawer__title">Create Implementation Plan</h2>
+    <button class="drawer__close" (click)="closed.emit()">
+      <i class="fa-light fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="drawer__body">
+    <div class="form-field">
+      <label for="clientName">Client Name <span class="required">*</span></label>
+      <input id="clientName" type="text" [ngModel]="clientName()"
+             (ngModelChange)="clientName.set($event)" placeholder="Enter client name">
+    </div>
+
+    <fieldset class="form-fieldset">
+      <legend class="form-fieldset__legend">Optional Modules</legend>
+
+      <label class="toggle-row">
+        <div class="toggle-row__text">
+          <span class="toggle-row__label">Time Off</span>
+          <span class="toggle-row__desc">Include time off policy setup in this plan</span>
+        </div>
+        <input type="checkbox" [ngModel]="modules().timeOff"
+               (ngModelChange)="toggleModule('timeOff', $event)">
+      </label>
+
+      <label class="toggle-row">
+        <div class="toggle-row__text">
+          <span class="toggle-row__label">Benefits</span>
+          <span class="toggle-row__desc">Include benefits enrollment setup in this plan</span>
+        </div>
+        <input type="checkbox" [ngModel]="modules().benefits"
+               (ngModelChange)="toggleModule('benefits', $event)">
+      </label>
+
+      <label class="toggle-row">
+        <div class="toggle-row__text">
+          <span class="toggle-row__label">Organizational Levels</span>
+          <span class="toggle-row__desc">Include division, department, project, shift, and work group setup</span>
+        </div>
+        <input type="checkbox" [ngModel]="modules().orgLevels"
+               (ngModelChange)="toggleModule('orgLevels', $event)">
+      </label>
+    </fieldset>
+  </div>
+
+  <div class="drawer__footer">
+    <button class="btn btn-secondary" (click)="closed.emit()">Cancel</button>
+    <button class="btn btn-primary" [disabled]="!isValid" (click)="submit()">Create Plan</button>
+  </div>
+</div>
