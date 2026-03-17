@@ -1,0 +1,23 @@
+<div class="repeatable-table">
+  <div class="repeatable-table__header">
+    <span class="repeatable-table__label">SUTA Billing</span>
+    <button class="btn btn-secondary btn--sm" type="button" (click)="addRow()">+ Add</button>
+  </div>
+  @if (rows().length) {
+    <table class="data-table">
+      <thead>
+        <tr><th>State</th><th>Effective Date</th><th>Bill Rate</th><th></th></tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.id) {
+          <tr>
+            <td><input type="text" [ngModel]="row.state" (ngModelChange)="updateRow(row.id, 'state', $event)" placeholder="e.g. TX"></td>
+            <td><input type="date" [ngModel]="row.effectiveDate" (ngModelChange)="updateRow(row.id, 'effectiveDate', $event)"></td>
+            <td><input type="number" [ngModel]="row.billRate" (ngModelChange)="updateRow(row.id, 'billRate', +$event)"></td>
+            <td><button type="button" class="btn-icon" (click)="removeRow(row.id)">✕</button></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

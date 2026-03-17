@@ -1,0 +1,23 @@
+<div class="repeatable-table">
+  <div class="repeatable-table__header">
+    <span class="repeatable-table__label">Billing Rules</span>
+    <button class="btn btn-secondary btn--sm" type="button" (click)="addRow()">+ Add</button>
+  </div>
+  @if (rules().length) {
+    <table class="data-table">
+      <thead>
+        <tr><th>Description</th><th>Rate</th><th>Based On</th><th></th></tr>
+      </thead>
+      <tbody>
+        @for (rule of rules(); track rule.id) {
+          <tr>
+            <td><input type="text" [ngModel]="rule.description" (ngModelChange)="updateRow(rule.id, 'description', $event)"></td>
+            <td><input type="number" [ngModel]="rule.rate" (ngModelChange)="updateRow(rule.id, 'rate', +$event)"></td>
+            <td><input type="text" [ngModel]="rule.basedOn" (ngModelChange)="updateRow(rule.id, 'basedOn', $event)"></td>
+            <td><button type="button" class="btn-icon" (click)="removeRow(rule.id)">✕</button></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
