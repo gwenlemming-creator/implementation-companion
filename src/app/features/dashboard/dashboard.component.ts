@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PlanService } from '../../core/services/plan.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Plan } from '../../core/models/plan.model';
@@ -10,7 +10,7 @@ import { CreatePlanDrawerComponent } from './components/create-plan-drawer/creat
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [FormsModule, PlanCardComponent, CreatePlanDrawerComponent],
+  imports: [FormsModule, PlanCardComponent, CreatePlanDrawerComponent, RouterLink],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
@@ -21,7 +21,7 @@ export class DashboardComponent {
   constructor() {
     effect(() => {
       if (this.authService.isWsm()) {
-        const plans = this.planService.getPlans();
+        const plans = this.planService.getActivePlans();
         if (plans.length > 0) {
           this.router.navigate(['/plans', plans[0].id], { replaceUrl: true });
         }
@@ -31,7 +31,7 @@ export class DashboardComponent {
 
   isWsm = this.authService.isWsm;
 
-  plans = signal<Plan[]>(this.planService.getPlans());
+  plans = signal<Plan[]>(this.planService.getActivePlans());
   searchQuery = signal('');
   showCreateDrawer = signal(false);
 
@@ -46,7 +46,7 @@ export class DashboardComponent {
   };
 
   onPlanCreated(plan: Plan): void {
-    this.plans.set(this.planService.getPlans());
+    this.plans.set(this.planService.getActivePlans());
     this.showCreateDrawer.set(false);
   }
 }
