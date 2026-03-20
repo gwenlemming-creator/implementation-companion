@@ -19,7 +19,7 @@
         <div class="page-header__left">
           @if (!isWsm()) {
             <nav class="breadcrumb">
-              <a routerLink="/plans">Implementation Plans</a>
+              <a [routerLink]="breadcrumbBase()">{{ breadcrumbLabel() }}</a>
               <span> › </span>
               <span>{{ p.clientName }}</span>
             </nav>
@@ -29,12 +29,25 @@
             <app-status-badge [status]="p.status" />
           </div>
         </div>
-        @if (!isWsm()) {
-          <button class="btn btn-secondary" (click)="showEditDrawer.set(true)">
-            Edit Plan Settings
-          </button>
+        @if (!isWsm() && !readOnly()) {
+          @if (canClose()) {
+            <button class="btn btn-secondary" (click)="showCloseConfirm.set(true)">
+              Close Implementation
+            </button>
+          } @else {
+            <button class="btn btn-secondary" (click)="showEditDrawer.set(true)">
+              Edit Plan Settings
+            </button>
+          }
         }
       </div>
+
+      @if (readOnly()) {
+        <div class="readonly-banner">
+          <i class="fas fa-lock"></i>
+          This implementation was completed on {{ plan()?.closedAt | date:'mediumDate' }} by {{ plan()?.closedBy ?? 'Unknown' }} and is read-only. To make changes, go to PrismHR.
+        </div>
+      }
 
       @if (isWsm() && !showCompletion()) {
         <app-progress-banner [sections]="p.sections" [currentSlug]="currentSlug()" />
@@ -48,10 +61,18 @@
     </main>
   </div>
 
-  @if (showEditDrawer() && !isWsm()) {
+  @if (showEditDrawer() && !isWsm() && !readOnly()) {
     <app-edit-plan-drawer
       [plan]="p"
       (closed)="showEditDrawer.set(false)" />
+  }
+
+  @if (showCloseConfirm()) {
+    <app-confirm-dialog
+      message="This will permanently lock this implementation plan. It will move to Completed Implementations and can no longer be edited. Continue?"
+      confirmLabel="Close Implementation"
+      (confirmed)="closeImplementation()"
+      (cancelled)="showCloseConfirm.set(false)" />
   }
 } @else {
   <p class="empty-state" style="padding: 2rem;">Plan not found.</p>
