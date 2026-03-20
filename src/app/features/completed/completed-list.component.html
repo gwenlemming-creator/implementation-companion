@@ -1,0 +1,94 @@
+@if (isWsm()) {
+  <div class="wsm-no-access">
+    <div class="wsm-no-access__card">
+      <i class="fas fa-link wsm-no-access__icon"></i>
+      <h2 class="wsm-no-access__heading">Access your plan via your invite link</h2>
+      <p class="wsm-no-access__sub">Your service provider sent you an email with a direct link to your implementation plan. Please use that link to access your plan.</p>
+    </div>
+  </div>
+} @else {
+<div class="app-shell">
+  <nav class="left-nav">
+    <a class="left-nav__item" routerLink="/plans">
+      <i class="fas fa-list-check"></i> Implementation Plans
+    </a>
+    <div class="left-nav__item left-nav__item--active">
+      <i class="fas fa-check-double"></i> Completed
+    </div>
+    <div class="left-nav__item">
+      <i class="fas fa-gear"></i> Settings
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Completed Implementations</h1>
+        <p class="page-subtitle">Review archived implementation plans</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input class="search-input" type="text" placeholder="Search by client name..."
+             [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)">
+    </div>
+
+    @if (filteredPlans().length === 0 && searchQuery() === '') {
+      <div class="empty-state">
+        <i class="fas fa-archive empty-state__icon"></i>
+        <p>No completed implementations yet. Plans will appear here once they're closed.</p>
+      </div>
+    } @else if (filteredPlans().length === 0) {
+      <p class="empty-state">No results matching "{{ searchQuery() }}"</p>
+    } @else {
+      <table class="completed-table">
+        <thead>
+          <tr>
+            <th class="completed-table__sortable" (click)="toggleSort('clientName')">
+              Client Name
+              @if (sortColumn() === 'clientName') {
+                <i class="fas" [class.fa-sort-up]="sortDirection() === 'asc'" [class.fa-sort-down]="sortDirection() === 'desc'"></i>
+              }
+            </th>
+            <th class="completed-table__sortable" (click)="toggleSort('closedAt')">
+              Completion Date
+              @if (sortColumn() === 'closedAt') {
+                <i class="fas" [class.fa-sort-up]="sortDirection() === 'asc'" [class.fa-sort-down]="sortDirection() === 'desc'"></i>
+              }
+            </th>
+            <th class="completed-table__sortable" (click)="toggleSort('worksiteManagerId')">
+              Worksite Manager
+              @if (sortColumn() === 'worksiteManagerId') {
+                <i class="fas" [class.fa-sort-up]="sortDirection() === 'asc'" [class.fa-sort-down]="sortDirection() === 'desc'"></i>
+              }
+            </th>
+            <th class="completed-table__sortable" (click)="toggleSort('closedBy')">
+              Closed By
+              @if (sortColumn() === 'closedBy') {
+                <i class="fas" [class.fa-sort-up]="sortDirection() === 'asc'" [class.fa-sort-down]="sortDirection() === 'desc'"></i>
+              }
+            </th>
+            <th>Modules</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (plan of filteredPlans(); track plan.id) {
+            <tr class="completed-table__row" [routerLink]="['/completed', plan.id]">
+              <td class="completed-table__client">{{ plan.clientName }}</td>
+              <td>{{ plan.closedAt | date:'mediumDate' }}</td>
+              <td>{{ plan.worksiteManagerId ?? '—' }}</td>
+              <td>{{ plan.closedBy ?? '—' }}</td>
+              <td class="completed-table__modules">
+                @if (plan.modules.timeOff) { <span class="module-tag">Time Off</span> }
+                @if (plan.modules.benefits) { <span class="module-tag">Benefits</span> }
+                @if (plan.modules.orgLevels) { <span class="module-tag">Org Levels</span> }
+                @if (!plan.modules.timeOff && !plan.modules.benefits && !plan.modules.orgLevels) { <span class="text-muted">—</span> }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </main>
+</div>
+}
