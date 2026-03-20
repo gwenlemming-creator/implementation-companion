@@ -272,3 +272,7 @@ body {
 .completion-screen__table { margin-top: 8px; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
 .completion-screen__table th { background: #f8faff; }
 .completion-screen__table td, .completion-screen__table th { padding: 10px 16px; }
+
+/* Dev Toolbar (remove when real auth is implemented) */
+.dev-toolbar { display: flex; align-items: center; gap: 8px; padding: 6px 16px; background: #fef3c7; border-bottom: 1px solid #fbbf24; font-size: 12px; }
+.dev-toolbar__label { font-weight: 700; color: #92400e; background: #fde68a; padding: 1px 6px; border-radius: 3px; }

@@ -1,1 +1,8 @@
+<div class="dev-toolbar">
+  <span class="dev-toolbar__label">DEV</span>
+  <span>Role:</span>
+  <button class="btn btn-secondary btn--sm" (click)="toggleRole()">
+    {{ currentRole() === 'service_provider' ? 'SP' : 'WSM' }} — click to switch
+  </button>
+</div>
 <router-outlet />
