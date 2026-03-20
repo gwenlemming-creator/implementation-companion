@@ -22,6 +22,8 @@ export class PlanService {
       sections: buildDefaultSections(modules),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      closedAt: null,
+      closedBy: null,
     };
     this.plans.push(plan);
     return plan;
@@ -89,5 +91,23 @@ export class PlanService {
     }
     plan.status = computePlanStatus(plan);
     plan.updatedAt = new Date().toISOString();
+  }
+
+  closePlan(id: string, closedByUserId: string): void {
+    const plan = this.getPlan(id);
+    if (!plan) return;
+    if (plan.status !== 'complete') return;
+    plan.status = 'closed';
+    plan.closedAt = new Date().toISOString();
+    plan.closedBy = closedByUserId;
+    plan.updatedAt = new Date().toISOString();
+  }
+
+  getClosedPlans(): Plan[] {
+    return [...this.plans.filter(p => p.status === 'closed')];
+  }
+
+  getActivePlans(): Plan[] {
+    return [...this.plans.filter(p => p.status !== 'closed')];
   }
 }

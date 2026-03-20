@@ -66,4 +66,65 @@ describe('PlanService', () => {
     const restored = service.getPlan(plan.id)?.sections.find(s => s.slug === benefitsSlug);
     expect(restored?.status).toBe('in_progress');
   });
+
+  describe('closePlan', () => {
+    it('sets status to closed with closedAt and closedBy', () => {
+      const plan = service.createPlan('Acme', { timeOff: false, benefits: false, orgLevels: false });
+      plan.sections.forEach(s => service.updateSection(plan.id, s.slug, { status: 'complete' }));
+      service.closePlan(plan.id, 'sp-user-1');
+      const closed = service.getPlan(plan.id);
+      expect(closed?.status).toBe('closed');
+      expect(closed?.closedAt).toBeTruthy();
+      expect(closed?.closedBy).toBe('sp-user-1');
+    });
+
+    it('does not close a plan that is not complete', () => {
+      const plan = service.createPlan('Acme', { timeOff: false, benefits: false, orgLevels: false });
+      service.closePlan(plan.id, 'sp-user-1');
+      expect(service.getPlan(plan.id)?.status).toBe('not_started');
+    });
+
+    it('does not close an already closed plan', () => {
+      const plan = service.createPlan('Acme', { timeOff: false, benefits: false, orgLevels: false });
+      plan.sections.forEach(s => service.updateSection(plan.id, s.slug, { status: 'complete' }));
+      service.closePlan(plan.id, 'sp-user-1');
+      const firstClosedAt = service.getPlan(plan.id)?.closedAt;
+      service.closePlan(plan.id, 'sp-user-2');
+      expect(service.getPlan(plan.id)?.closedBy).toBe('sp-user-1');
+      expect(service.getPlan(plan.id)?.closedAt).toBe(firstClosedAt);
+    });
+  });
+
+  describe('getClosedPlans', () => {
+    it('returns only closed plans', () => {
+      const a = service.createPlan('A', { timeOff: false, benefits: false, orgLevels: false });
+      service.createPlan('B', { timeOff: false, benefits: false, orgLevels: false });
+      a.sections.forEach(s => service.updateSection(a.id, s.slug, { status: 'complete' }));
+      service.closePlan(a.id, 'sp-1');
+      const closed = service.getClosedPlans();
+      expect(closed.length).toBe(1);
+      expect(closed[0].clientName).toBe('A');
+    });
+
+    it('returns a copy, not the internal array', () => {
+      const a = service.createPlan('A', { timeOff: false, benefits: false, orgLevels: false });
+      a.sections.forEach(s => service.updateSection(a.id, s.slug, { status: 'complete' }));
+      service.closePlan(a.id, 'sp-1');
+      const result = service.getClosedPlans();
+      result.push({} as any);
+      expect(service.getClosedPlans().length).toBe(1);
+    });
+  });
+
+  describe('getActivePlans', () => {
+    it('excludes closed plans', () => {
+      const a = service.createPlan('A', { timeOff: false, benefits: false, orgLevels: false });
+      service.createPlan('B', { timeOff: false, benefits: false, orgLevels: false });
+      a.sections.forEach(s => service.updateSection(a.id, s.slug, { status: 'complete' }));
+      service.closePlan(a.id, 'sp-1');
+      const active = service.getActivePlans();
+      expect(active.length).toBe(1);
+      expect(active[0].clientName).toBe('B');
+    });
+  });
 });
