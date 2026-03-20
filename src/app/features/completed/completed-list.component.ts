@@ -5,12 +5,10 @@ import { DatePipe } from '@angular/common';
 import { PlanService } from '../../core/services/plan.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Plan } from '../../core/models/plan.model';
-import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
-
 @Component({
   selector: 'app-completed-list',
   standalone: true,
-  imports: [FormsModule, RouterLink, StatusBadgeComponent, DatePipe],
+  imports: [FormsModule, RouterLink, DatePipe],
   templateUrl: './completed-list.component.html',
   styleUrl: './completed-list.component.css'
 })
