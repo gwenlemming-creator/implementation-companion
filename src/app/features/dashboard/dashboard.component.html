@@ -1,13 +1,22 @@
+@if (isWsm()) {
+  <div class="wsm-no-access">
+    <div class="wsm-no-access__card">
+      <i class="fas fa-link wsm-no-access__icon"></i>
+      <h2 class="wsm-no-access__heading">Access your plan via your invite link</h2>
+      <p class="wsm-no-access__sub">Your service provider sent you an email with a direct link to your implementation plan. Please use that link to access your plan.</p>
+    </div>
+  </div>
+} @else {
 <div class="app-shell">
   <nav class="left-nav">
     <div class="left-nav__item left-nav__item--active">
-      <i class="fa-light fa-list-check"></i> Implementation Plans
+      <i class="fas fa-list-check"></i> Implementation Plans
     </div>
     <div class="left-nav__item">
-      <i class="fa-light fa-building"></i> Clients
+      <i class="fas fa-building"></i> Clients
     </div>
     <div class="left-nav__item">
-      <i class="fa-light fa-gear"></i> Settings
+      <i class="fas fa-gear"></i> Settings
     </div>
   </nav>
 
@@ -19,11 +28,30 @@
       </div>
     </div>
 
+    <div class="summary-widgets">
+      <div class="summary-widget">
+        <span class="summary-widget__value">{{ totalPlans() }}</span>
+        <span class="summary-widget__label">Total Plans</span>
+      </div>
+      <div class="summary-widget summary-widget--in-progress">
+        <span class="summary-widget__value">{{ inProgress() }}</span>
+        <span class="summary-widget__label">In Progress</span>
+      </div>
+      <div class="summary-widget summary-widget--complete">
+        <span class="summary-widget__value">{{ completed() }}</span>
+        <span class="summary-widget__label">Complete</span>
+      </div>
+      <div class="summary-widget summary-widget--not-started">
+        <span class="summary-widget__value">{{ notStarted() }}</span>
+        <span class="summary-widget__label">Not Started</span>
+      </div>
+    </div>
+
     <div class="toolbar">
       <input class="search-input" type="text" placeholder="Search plans..."
              [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)">
       <button class="btn btn-primary" (click)="showCreateDrawer.set(true)">
-        <i class="fa-light fa-plus"></i> Create Plan
+        <i class="fa-regular fa-plus"></i> Create Plan
       </button>
     </div>
 
@@ -41,4 +69,5 @@
   <app-create-plan-drawer
     (planCreated)="onPlanCreated($event)"
     (closed)="showCreateDrawer.set(false)" />
+}
 }

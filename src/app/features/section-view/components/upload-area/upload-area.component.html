@@ -1,0 +1,30 @@
+@switch (state()) {
+  @case ('success') {
+    <div class="upload-success">
+      <i class="fa-regular fa-circle-check"></i>
+      File uploaded successfully — your service provider will review the mapping
+      <button class="btn-icon" (click)="clear()">✕</button>
+    </div>
+  }
+  @case ('error-format') {
+    <div class="upload-error">This file type isn't supported. Please upload a PDF, Excel, CSV, or JPEG.</div>
+    <div class="upload-zone" (click)="fileInput.click()">Try again</div>
+  }
+  @case ('error-network') {
+    <div class="upload-error">Upload failed — please try again.</div>
+    <div class="upload-zone" (click)="fileInput.click()">Try again</div>
+  }
+  @default {
+    <div class="upload-zone"
+         [class.upload-zone--dragover]="isDragOver()"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave()"
+         (drop)="onDrop($event)"
+         (click)="fileInput.click()">
+      <i class="fas fa-upload upload-zone__icon"></i>
+      <p class="upload-zone__label">Drag and drop your file here</p>
+      <p class="upload-zone__sub">or <span class="link">browse to upload</span> — PDF, Excel, CSV, or JPEG accepted</p>
+    </div>
+  }
+}
+<input #fileInput type="file" accept=".pdf,.xls,.xlsx,.csv,.jpg,.jpeg" style="display:none" (change)="onFileSelected($event)">

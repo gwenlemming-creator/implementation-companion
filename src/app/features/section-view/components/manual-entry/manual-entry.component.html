@@ -1,0 +1,311 @@
+<div class="manual-form">
+
+  @switch (section().slug) {
+
+    <!-- ── Company Info ─────────────────────────────────────────── -->
+    @case ('company-info') {
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Legal Name <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().legalName" (ngModelChange)="setCompanyInfo('legalName', $event)" />
+          </div>
+          <div class="form-field">
+            <label>DBA <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().dba" (ngModelChange)="setCompanyInfo('dba', $event)" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--wide">
+            <label>Address 1 <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().address1" (ngModelChange)="setCompanyInfo('address1', $event)" />
+          </div>
+          <div class="form-field form-field--wide">
+            <label>Address 2</label>
+            <input type="text" [ngModel]="companyInfo().address2" (ngModelChange)="setCompanyInfo('address2', $event)" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>City <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().city" (ngModelChange)="setCompanyInfo('city', $event)" />
+          </div>
+          <div class="form-field form-field--narrow">
+            <label>State <span class="required">*</span></label>
+            <select [ngModel]="companyInfo().state" (ngModelChange)="setCompanyInfo('state', $event)">
+              <option value="">Select…</option>
+              @for (s of usStates; track s) { <option [value]="s">{{ s }}</option> }
+            </select>
+          </div>
+          <div class="form-field form-field--narrow">
+            <label>Zip <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().zip" (ngModelChange)="setCompanyInfo('zip', $event)" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Telephone <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().telephone" (ngModelChange)="setCompanyInfo('telephone', $event)" />
+          </div>
+          <div class="form-field form-field--wide">
+            <label>Business Type <span class="required">*</span></label>
+            <select [ngModel]="companyInfo().businessType" (ngModelChange)="setCompanyInfo('businessType', $event)">
+              <option value="">Select…</option>
+              @for (t of businessTypes; track t) { <option [value]="t">{{ t }}</option> }
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section__title">Primary Contact</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Name <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().contactName" (ngModelChange)="setCompanyInfo('contactName', $event)" />
+          </div>
+          <div class="form-field">
+            <label>Title <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().contactTitle" (ngModelChange)="setCompanyInfo('contactTitle', $event)" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Telephone <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().contactTelephone" (ngModelChange)="setCompanyInfo('contactTelephone', $event)" />
+          </div>
+          <div class="form-field">
+            <label>Email <span class="required">*</span></label>
+            <input type="text" [ngModel]="companyInfo().contactEmail" (ngModelChange)="setCompanyInfo('contactEmail', $event)" />
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ── FEIN ──────────────────────────────────────────────────── -->
+    @case ('fein') {
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Federal ID Number <span class="required">*</span></label>
+            <input type="text" placeholder="XX-XXXXXXX" [ngModel]="feinData().federalId" (ngModelChange)="setFein($event)" />
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ── Banking / ACH ─────────────────────────────────────────── -->
+    @case ('banking-ach') {
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Account Number <span class="required">*</span></label>
+            <input type="text" [ngModel]="banking().accountNumber" (ngModelChange)="setBanking('accountNumber', $event)" />
+          </div>
+          <div class="form-field">
+            <label>Routing Number <span class="required">*</span></label>
+            <input type="text" [ngModel]="banking().routingNumber" (ngModelChange)="setBanking('routingNumber', $event)" />
+          </div>
+          <div class="form-field form-field--narrow">
+            <label>Account Type <span class="required">*</span></label>
+            <select [ngModel]="banking().accountType" (ngModelChange)="setBanking('accountType', $event)">
+              <option value="">Select…</option>
+              <option value="Checking">Checking</option>
+              <option value="Savings">Savings</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ── Payroll Schedule ──────────────────────────────────────── -->
+    @case ('payroll-schedule') {
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Pay Period <span class="required">*</span></label>
+            <select [ngModel]="payroll().payPeriod" (ngModelChange)="setPayroll('payPeriod', $event)">
+              <option value="">Select…</option>
+              @for (p of payPeriods; track p) { <option [value]="p">{{ p }}</option> }
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Pay Date <span class="required">*</span></label>
+            <select [ngModel]="payroll().payDate" (ngModelChange)="setPayroll('payDate', $event)">
+              <option value="">Select…</option>
+              @for (d of payDays; track d) { <option [value]="d">{{ d }}</option> }
+            </select>
+          </div>
+        </div>
+        <div class="form-row form-row--align-end">
+          <div class="form-field form-field--narrow">
+            <label>Pay Period Ends <span class="required">*</span></label>
+            <input type="number" min="0" placeholder="# days" [ngModel]="payroll().periodEndsValue" (ngModelChange)="setPayroll('periodEndsValue', $event)" />
+          </div>
+          <div class="form-field">
+            <label>&nbsp;</label>
+            <select [ngModel]="payroll().periodEndsDirection" (ngModelChange)="setPayroll('periodEndsDirection', $event)">
+              <option value="before">days before the pay date</option>
+              <option value="after">days after the pay date</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ── Positions ─────────────────────────────────────────────── -->
+    @case ('positions') {
+      <div class="form-section">
+        <div class="repeating-table">
+          <div class="repeating-table__header">
+            <span class="repeating-table__label">Positions</span>
+            <button class="btn btn-secondary btn--sm" type="button" (click)="addPosition()">
+              <i class="fas fa-plus"></i> Add Position
+            </button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title <span class="required">*</span></th>
+                <th>Description</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of positions(); track row.id) {
+                <tr>
+                  <td><input type="text" [ngModel]="row.title" (ngModelChange)="setPosition(row.id, 'title', $event)" placeholder="Position title" /></td>
+                  <td><input type="text" [ngModel]="row.description" (ngModelChange)="setPosition(row.id, 'description', $event)" placeholder="Optional" /></td>
+                  <td>
+                    @if (positions().length > 1) {
+                      <button class="btn-icon" type="button" (click)="removePosition(row.id)">
+                        <i class="fas fa-xmark"></i>
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ── W/C Codes ──────────────────────────────────────────────── -->
+    @case ('wc-codes') {
+      <div class="form-section">
+        <div class="repeating-table">
+          <div class="repeating-table__header">
+            <span class="repeating-table__label">Workers' Compensation Codes</span>
+            <button class="btn btn-secondary btn--sm" type="button" (click)="addWcCode()">
+              <i class="fas fa-plus"></i> Add Code
+            </button>
+          </div>
+          @for (row of wcCodes(); track row.id) {
+            <div class="wc-row">
+              <div class="form-row">
+                <div class="form-field form-field--narrow">
+                  <label>Code <span class="required">*</span></label>
+                  <input type="text" [ngModel]="row.code" (ngModelChange)="setWcCode(row.id, $event)" placeholder="W/C Code" />
+                </div>
+                @if (wcCodes().length > 1) {
+                  <button class="btn-icon wc-row__remove" type="button" (click)="removeWcCode(row.id)">
+                    <i class="fas fa-xmark"></i>
+                  </button>
+                }
+              </div>
+              @if (availablePositions().length > 0) {
+                <div class="form-field">
+                  <label>Associated Positions</label>
+                  <div class="checkbox-group">
+                    @for (pos of availablePositions(); track pos) {
+                      <label class="checkbox-label">
+                        <input type="checkbox"
+                               [checked]="row.positions.includes(pos)"
+                               (change)="toggleWcPosition(row.id, pos)" />
+                        {{ pos }}
+                      </label>
+                    }
+                  </div>
+                </div>
+              } @else {
+                <p class="wc-row__hint">Add positions in the Positions section to link them here.</p>
+              }
+              @if (!$last) { <hr class="row-divider" /> }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ── Worksite Locations ─────────────────────────────────────── -->
+    @case ('worksite-locations') {
+      <div class="form-section">
+        <div class="repeating-table">
+          <div class="repeating-table__header">
+            <span class="repeating-table__label">Worksite Locations</span>
+            <button class="btn btn-secondary btn--sm" type="button" (click)="addLocation()">
+              <i class="fas fa-plus"></i> Add Location
+            </button>
+          </div>
+          @for (row of locations(); track row.id) {
+            <div class="location-row">
+              <div class="form-row">
+                <div class="form-field form-field--wide">
+                  <label>Location Name <span class="required">*</span></label>
+                  <input type="text" [ngModel]="row.name" (ngModelChange)="setLocation(row.id, 'name', $event)" />
+                </div>
+                @if (locations().length > 1) {
+                  <button class="btn-icon location-row__remove" type="button" (click)="removeLocation(row.id)">
+                    <i class="fas fa-xmark"></i>
+                  </button>
+                }
+              </div>
+              <div class="form-row">
+                <div class="form-field form-field--wide">
+                  <label>Address 1 <span class="required">*</span></label>
+                  <input type="text" [ngModel]="row.address1" (ngModelChange)="setLocation(row.id, 'address1', $event)" />
+                </div>
+                <div class="form-field form-field--wide">
+                  <label>Address 2</label>
+                  <input type="text" [ngModel]="row.address2" (ngModelChange)="setLocation(row.id, 'address2', $event)" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label>City <span class="required">*</span></label>
+                  <input type="text" [ngModel]="row.city" (ngModelChange)="setLocation(row.id, 'city', $event)" />
+                </div>
+                <div class="form-field form-field--narrow">
+                  <label>State <span class="required">*</span></label>
+                  <select [ngModel]="row.state" (ngModelChange)="setLocation(row.id, 'state', $event)">
+                    <option value="">Select…</option>
+                    @for (s of usStates; track s) { <option [value]="s">{{ s }}</option> }
+                  </select>
+                </div>
+                <div class="form-field form-field--narrow">
+                  <label>Zip <span class="required">*</span></label>
+                  <input type="text" [ngModel]="row.zip" (ngModelChange)="setLocation(row.id, 'zip', $event)" />
+                </div>
+              </div>
+              @if (!$last) { <hr class="row-divider" /> }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ── Fallback (optional modules not yet defined) ────────────── -->
+    @default {
+      <div class="manual-entry-placeholder">
+        <p class="manual-entry-placeholder__text">
+          <i class="fa-regular fa-circle-info"></i>
+          Form fields for <strong>{{ section().title }}</strong> are coming soon.
+          For now, use the file upload option to submit your data.
+        </p>
+      </div>
+    }
+
+  }
+
+</div>

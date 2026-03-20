@@ -29,6 +29,8 @@ export class DashboardComponent {
     });
   }
 
+  isWsm = this.authService.isWsm;
+
   plans = signal<Plan[]>(this.planService.getPlans());
   searchQuery = signal('');
   showCreateDrawer = signal(false);

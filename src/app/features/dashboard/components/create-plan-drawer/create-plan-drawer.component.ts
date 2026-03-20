@@ -4,6 +4,8 @@ import { Plan } from '../../../../core/models/plan.model';
 import { PlanService } from '../../../../core/services/plan.service';
 import { Router } from '@angular/router';
 
+type ModuleKey = 'timeOff' | 'benefits' | 'orgLevels';
+
 @Component({
   selector: 'app-create-plan-drawer',
   standalone: true,
@@ -22,7 +24,7 @@ export class CreatePlanDrawerComponent {
 
   get isValid(): boolean { return this.clientName().trim().length > 0; }
 
-  toggleModule(key: keyof typeof this.modules, value: boolean): void {
+  toggleModule(key: ModuleKey, value: boolean): void {
     this.modules.update(m => ({ ...m, [key]: value }));
   }
 

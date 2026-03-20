@@ -2,7 +2,7 @@
   <div class="sp-config__header" (click)="collapsed.set(!collapsed())">
     <span class="sp-config__title">⚙️ Service Provider Configuration</span>
     <span class="sp-config__badge">{{ filledCount() }} of 11 fields complete</span>
-    <i class="fa-light" [class.fa-chevron-down]="collapsed()" [class.fa-chevron-up]="!collapsed()"></i>
+    <i class="fa-regular" [class.fa-chevron-down]="collapsed()" [class.fa-chevron-up]="!collapsed()"></i>
   </div>
 
   @if (!collapsed()) {
@@ -22,8 +22,8 @@
             <div class="form-field">
               <label [for]="field.key">{{ field.label }}</label>
               <input [id]="field.key" type="text"
-                     [ngModel]="config()[field.key]"
-                     (ngModelChange)="updateField(field.key, $event)">
+                     [ngModel]="$any(config())[field.key]"
+                     (ngModelChange)="updateField($any(field.key), $event)">
             </div>
           }
           <div class="form-field">
@@ -40,8 +40,8 @@
             <div class="form-field">
               <label [for]="'payCode'+n">Pay Code {{ n }}</label>
               <input [id]="'payCode'+n" type="text"
-                     [ngModel]="config()['payCode'+n]"
-                     (ngModelChange)="updateField('payCode'+n, $event)">
+                     [ngModel]="$any(config())['payCode'+n]"
+                     (ngModelChange)="updateField($any('payCode'+n), $event)">
             </div>
           }
 

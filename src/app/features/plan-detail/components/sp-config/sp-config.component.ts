@@ -1,4 +1,5 @@
-import { Component, inject, input, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PlanService } from '../../../../core/services/plan.service';
 import { SpConfig, computeSpConfigComplete } from '../../../../core/models/plan.model';
@@ -12,10 +13,11 @@ import { SutaBillingTableComponent } from './components/suta-billing-table/suta-
   templateUrl: './sp-config.component.html'
 })
 export class SpConfigComponent {
+  private route = inject(ActivatedRoute);
   private planService = inject(PlanService);
-  planId = input.required<string>();
+  planId = this.route.snapshot.parent?.paramMap.get('id') ?? this.route.snapshot.paramMap.get('id')!;
 
-  plan = computed(() => this.planService.getPlan(this.planId()));
+  plan = computed(() => this.planService.getPlan(this.planId));
   draft = signal<Partial<SpConfig>>({});
   collapsed = signal(false);
   saved = signal(false);
@@ -37,7 +39,7 @@ export class SpConfigComponent {
   }
 
   saveConfig(): void {
-    this.planService.updateSpConfig(this.planId(), {
+    this.planService.updateSpConfig(this.planId, {
       ...this.config(),
       savedAt: new Date().toISOString()
     });

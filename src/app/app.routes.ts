@@ -10,17 +10,18 @@ export const routes: Routes = [
   {
     path: 'plans/:id',
     loadComponent: () =>
-      import('./features/plan-detail/plan-detail.component').then(m => m.PlanDetailComponent)
-  },
-  {
-    path: 'plans/:id/config',
-    loadComponent: () =>
       import('./features/plan-detail/plan-detail.component').then(m => m.PlanDetailComponent),
-    data: { activePanel: 'config' }
-  },
-  {
-    path: 'plans/:id/sections/:sectionSlug',
-    loadComponent: () =>
-      import('./features/section-view/section-view.component').then(m => m.SectionViewComponent)
+    children: [
+      {
+        path: 'sections/:sectionSlug',
+        loadComponent: () =>
+          import('./features/section-view/section-view.component').then(m => m.SectionViewComponent)
+      },
+      {
+        path: 'config',
+        loadComponent: () =>
+          import('./features/plan-detail/components/sp-config/sp-config.component').then(m => m.SpConfigComponent)
+      }
+    ]
   }
 ];

@@ -2,7 +2,7 @@
 <div class="drawer">
   <div class="drawer__header">
     <h2 class="drawer__title">Edit Plan Settings</h2>
-    <button class="drawer__close" (click)="closed.emit()"><i class="fa-light fa-xmark"></i></button>
+    <button class="drawer__close" (click)="closed.emit()"><i class="fa-regular fa-xmark"></i></button>
   </div>
 
   <div class="drawer__body">
@@ -17,11 +17,11 @@
       @for (key of ['timeOff','benefits','orgLevels']; track key) {
         <label class="toggle-row">
           <div class="toggle-row__text">
-            <span class="toggle-row__label">{{ moduleLabel(key) }}</span>
+            <span class="toggle-row__label">{{ moduleLabel($any(key)) }}</span>
           </div>
           <input type="checkbox"
-                 [ngModel]="localModules()[key]"
-                 (ngModelChange)="onModuleToggle(key, $event)">
+                 [ngModel]="$any(localModules())[key]"
+                 (ngModelChange)="onModuleToggle($any(key), $event)">
         </label>
       }
     </fieldset>
