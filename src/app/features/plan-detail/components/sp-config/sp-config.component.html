@@ -6,6 +6,7 @@
   </div>
 
   @if (!collapsed()) {
+    <fieldset [disabled]="readOnly()">
     <div class="sp-config__body">
       <div class="form-grid form-grid--2col">
         <div class="form-col">
@@ -57,8 +58,11 @@
 
       <div class="sp-config__footer">
         @if (saved()) { <span class="save-confirm">✓ Saved</span> }
-        <button class="btn btn-primary" (click)="saveConfig()">Save Configuration</button>
+        @if (!readOnly()) {
+          <button class="btn btn-primary" (click)="saveConfig()">Save Configuration</button>
+        }
       </div>
     </div>
+    </fieldset>
   }
 </div>

@@ -15,6 +15,7 @@ import { SutaBillingTableComponent } from './components/suta-billing-table/suta-
 export class SpConfigComponent {
   private route = inject(ActivatedRoute);
   private planService = inject(PlanService);
+  readOnly = signal(!!this.route.parent?.snapshot.data['readOnly']);
   planId = this.route.snapshot.parent?.paramMap.get('id') ?? this.route.snapshot.paramMap.get('id')!;
 
   plan = computed(() => this.planService.getPlan(this.planId));

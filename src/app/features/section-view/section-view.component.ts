@@ -1,5 +1,6 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { PlanService } from '../../core/services/plan.service';
@@ -11,7 +12,21 @@ import { ManualEntryComponent } from './components/manual-entry/manual-entry.com
 @Component({
   selector: 'app-section-view',
   standalone: true,
-  imports: [StatusBadgeComponent, UploadAreaComponent, ManualEntryComponent],
+  imports: [StatusBadgeComponent, UploadAreaComponent, ManualEntryComponent, DatePipe],
+  styles: [`
+    .upload-summary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: var(--success-bg);
+      border-radius: 6px;
+      color: var(--text-color);
+    }
+    .upload-summary i {
+      color: var(--success);
+    }
+  `],
   template: `
     @if (section(); as s) {
       <div class="section-card">
@@ -21,34 +36,47 @@ import { ManualEntryComponent } from './components/manual-entry/manual-entry.com
         </div>
 
         <div class="section-card__body">
-          <div class="method-toggle">
-            <div class="method-card" [class.method-card--active]="activeMethod() === 'upload'"
-                 (click)="switchMethod('upload')">
-              <i class="fa-regular fa-file method-card__icon"></i>
-              <div class="method-card__title">Upload a File</div>
-              <div class="method-card__desc">PDF, Excel, CSV, or JPEG</div>
+          @if (!readOnly()) {
+            <div class="method-toggle">
+              <div class="method-card" [class.method-card--active]="activeMethod() === 'upload'"
+                   (click)="switchMethod('upload')">
+                <i class="fa-regular fa-file method-card__icon"></i>
+                <div class="method-card__title">Upload a File</div>
+                <div class="method-card__desc">PDF, Excel, CSV, or JPEG</div>
+              </div>
+              <div class="method-card" [class.method-card--active]="activeMethod() === 'manual'"
+                   (click)="switchMethod('manual')">
+                <i class="fa-regular fa-pen-to-square method-card__icon"></i>
+                <div class="method-card__title">Enter Manually</div>
+                <div class="method-card__desc">Type directly into form fields</div>
+              </div>
             </div>
-            <div class="method-card" [class.method-card--active]="activeMethod() === 'manual'"
-                 (click)="switchMethod('manual')">
-              <i class="fa-regular fa-pen-to-square method-card__icon"></i>
-              <div class="method-card__title">Enter Manually</div>
-              <div class="method-card__desc">Type directly into form fields</div>
-            </div>
-          </div>
-
-          @if (activeMethod() === 'upload') {
-            <app-upload-area (fileUploaded)="onFileUploaded()" (cleared)="onFileCleared()" />
-          } @else {
-            <app-manual-entry [section]="s" [planId]="planId()!" (dataChanged)="onManualDataChanged($event)" />
           }
+
+          @if (readOnly() && s.inputMethodAtCompletion === 'upload') {
+            <div class="upload-summary">
+              <i class="fas fa-file"></i>
+              <span>File uploaded — {{ s.completedAt | date:'mediumDate' }}</span>
+            </div>
+          }
+
+          <fieldset [disabled]="readOnly()">
+            @if (activeMethod() === 'upload') {
+              <app-upload-area (fileUploaded)="onFileUploaded()" (cleared)="onFileCleared()" />
+            } @else {
+              <app-manual-entry [section]="s" [planId]="planId()!" (dataChanged)="onManualDataChanged($event)" />
+            }
+          </fieldset>
         </div>
 
-        <div class="section-card__footer">
-          <button class="btn btn-secondary" (click)="saveDraft()">Save Draft</button>
-          <button class="btn btn-primary" [disabled]="!canMarkComplete" (click)="markComplete()">
-            Mark Complete
-          </button>
-        </div>
+        @if (!readOnly()) {
+          <div class="section-card__footer">
+            <button class="btn btn-secondary" (click)="saveDraft()">Save Draft</button>
+            <button class="btn btn-primary" [disabled]="!canMarkComplete" (click)="markComplete()">
+              Mark Complete
+            </button>
+          </div>
+        }
       </div>
     } @else {
       <p class="empty-state">Section not found.</p>
@@ -58,6 +86,7 @@ import { ManualEntryComponent } from './components/manual-entry/manual-entry.com
 export class SectionViewComponent {
   private route = inject(ActivatedRoute);
   private planService = inject(PlanService);
+  readOnly = signal(!!this.route.parent?.snapshot.data['readOnly']);
 
   planId = toSignal(
     this.route.paramMap.pipe(map(p => p.get('id') ?? this.route.snapshot.parent?.paramMap.get('id') ?? ''))

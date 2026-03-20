@@ -6,34 +6,47 @@
     </div>
 
     <div class="section-card__body">
-      <div class="method-toggle">
-        <div class="method-card" [class.method-card--active]="activeMethod() === 'upload'"
-             (click)="switchMethod('upload')">
-          <i class="fa-regular fa-file method-card__icon"></i>
-          <div class="method-card__title">Upload a File</div>
-          <div class="method-card__desc">PDF, Excel, CSV, or JPEG</div>
+      @if (!readOnly()) {
+        <div class="method-toggle">
+          <div class="method-card" [class.method-card--active]="activeMethod() === 'upload'"
+               (click)="switchMethod('upload')">
+            <i class="fa-regular fa-file method-card__icon"></i>
+            <div class="method-card__title">Upload a File</div>
+            <div class="method-card__desc">PDF, Excel, CSV, or JPEG</div>
+          </div>
+          <div class="method-card" [class.method-card--active]="activeMethod() === 'manual'"
+               (click)="switchMethod('manual')">
+            <i class="fa-regular fa-pen-to-square method-card__icon"></i>
+            <div class="method-card__title">Enter Manually</div>
+            <div class="method-card__desc">Type directly into form fields</div>
+          </div>
         </div>
-        <div class="method-card" [class.method-card--active]="activeMethod() === 'manual'"
-             (click)="switchMethod('manual')">
-          <i class="fa-regular fa-pen-to-square method-card__icon"></i>
-          <div class="method-card__title">Enter Manually</div>
-          <div class="method-card__desc">Type directly into form fields</div>
-        </div>
-      </div>
-
-      @if (activeMethod() === 'upload') {
-        <app-upload-area (fileUploaded)="onFileUploaded()" (cleared)="onFileCleared()" />
-      } @else {
-        <app-manual-entry [section]="s" [planId]="planId()!" (dataChanged)="onManualDataChanged($event)" />
       }
+
+      @if (readOnly() && s.inputMethodAtCompletion === 'upload') {
+        <div class="upload-summary">
+          <i class="fas fa-file"></i>
+          <span>File uploaded — {{ s.completedAt | date:'mediumDate' }}</span>
+        </div>
+      }
+
+      <fieldset [disabled]="readOnly()">
+        @if (activeMethod() === 'upload') {
+          <app-upload-area (fileUploaded)="onFileUploaded()" (cleared)="onFileCleared()" />
+        } @else {
+          <app-manual-entry [section]="s" [planId]="planId()!" (dataChanged)="onManualDataChanged($event)" />
+        }
+      </fieldset>
     </div>
 
-    <div class="section-card__footer">
-      <button class="btn btn-secondary" (click)="saveDraft()">Save Draft</button>
-      <button class="btn btn-primary" [disabled]="!canMarkComplete" (click)="markComplete()">
-        Mark Complete
-      </button>
-    </div>
+    @if (!readOnly()) {
+      <div class="section-card__footer">
+        <button class="btn btn-secondary" (click)="saveDraft()">Save Draft</button>
+        <button class="btn btn-primary" [disabled]="!canMarkComplete" (click)="markComplete()">
+          Mark Complete
+        </button>
+      </div>
+    }
   </div>
 } @else {
   <p class="empty-state">Section not found.</p>
