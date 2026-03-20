@@ -49,6 +49,13 @@ describe('computePlanStatus', () => {
       .map(s => ({ ...s, status: 'complete' as const }));
     expect(computePlanStatus({ sections } as Plan)).toBe('complete');
   });
+
+  it('does not return closed — closed is set explicitly, not computed', () => {
+    // computePlanStatus never returns 'closed'; closure is a manual action
+    const sections = buildDefaultSections({ timeOff: false, benefits: false, orgLevels: false })
+      .map(s => ({ ...s, status: 'complete' as const }));
+    expect(computePlanStatus({ sections } as Plan)).toBe('complete');
+  });
 });
 
 describe('computeSpConfigComplete', () => {

@@ -1,4 +1,4 @@
-export type PlanStatus = 'not_started' | 'in_progress' | 'complete';
+export type PlanStatus = 'not_started' | 'in_progress' | 'complete' | 'closed';
 export type SectionStatus = 'not_started' | 'in_progress' | 'complete';
 export type InputMethod = 'upload' | 'manual';
 
@@ -60,6 +60,8 @@ export interface Plan {
   sections: PlanSection[];
   createdAt: string;
   updatedAt: string;
+  closedAt: string | null;
+  closedBy: string | null;
 }
 
 export const CORE_SECTIONS: Pick<PlanSection, 'slug' | 'title' | 'order' | 'optional'>[] = [
