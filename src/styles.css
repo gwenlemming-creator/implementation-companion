@@ -62,6 +62,7 @@ body {
 .badge--not-started { background: var(--disabled-bg); color: #64748b; }
 .badge--in-progress { background: var(--primary-light); color: var(--primary); }
 .badge--complete    { background: var(--success-bg); color: #16a34a; }
+.badge--closed      { background: #f0f0f4; color: #475569; }
 
 /* Status Dot */
 .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }

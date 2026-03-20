@@ -15,7 +15,8 @@ export class StatusBadgeComponent {
     const map: Record<string, string> = {
       not_started: 'Not Started',
       in_progress: 'In Progress',
-      complete: 'Complete'
+      complete: 'Complete',
+      closed: 'Closed'
     };
     return map[this.status()] ?? this.status();
   });
