@@ -1,39 +1,54 @@
 @if (plan(); as p) {
   <div class="app-shell">
     <aside class="left-nav-wrapper">
-      <div class="left-nav__back">
-        <a routerLink="/plans"><i class="fa-light fa-arrow-left"></i> Plans</a>
-      </div>
+      @if (!isWsm()) {
+        <div class="left-nav__back">
+          <a routerLink="/plans"><i class="fas fa-arrow-left"></i> Plans</a>
+        </div>
+      }
       <app-section-nav
         [sections]="p.sections"
         [planId]="planId"
         [spConfigComplete]="spConfigComplete()"
-        [spConfigFilledCount]="spConfigFilledCount()" />
+        [spConfigFilledCount]="spConfigFilledCount()"
+        [role]="isWsm() ? 'worksite_manager' : 'service_provider'" />
     </aside>
 
     <main class="main-content">
       <div class="page-header">
         <div class="page-header__left">
-          <nav class="breadcrumb">
-            <a routerLink="/plans">Implementation Plans</a>
-            <span> › </span>
-            <span>{{ p.clientName }}</span>
-          </nav>
+          @if (!isWsm()) {
+            <nav class="breadcrumb">
+              <a routerLink="/plans">Implementation Plans</a>
+              <span> › </span>
+              <span>{{ p.clientName }}</span>
+            </nav>
+          }
           <div class="page-header__title-row">
             <h1 class="page-title">{{ p.clientName }}</h1>
             <app-status-badge [status]="p.status" />
           </div>
         </div>
-        <button class="btn btn-secondary" (click)="showEditDrawer.set(true)">
-          Edit Plan Settings
-        </button>
+        @if (!isWsm()) {
+          <button class="btn btn-secondary" (click)="showEditDrawer.set(true)">
+            Edit Plan Settings
+          </button>
+        }
       </div>
 
-      <router-outlet />
+      @if (isWsm() && !showCompletion()) {
+        <app-progress-banner [sections]="p.sections" [currentSlug]="currentSlug()" />
+      }
+
+      @if (showCompletion()) {
+        <app-completion-screen [sections]="p.sections" />
+      } @else {
+        <router-outlet />
+      }
     </main>
   </div>
 
-  @if (showEditDrawer()) {
+  @if (showEditDrawer() && !isWsm()) {
     <app-edit-plan-drawer
       [plan]="p"
       (closed)="showEditDrawer.set(false)" />
